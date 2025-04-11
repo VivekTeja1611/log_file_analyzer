@@ -13,16 +13,11 @@ def main():
 def success():
     if request.method == 'POST':
         f = request.files['file']
-        filename = secure_filename(f.filename)
-        filepath = os.path.join("uploads", filename)
-        f.save(filepath)
+        f.save('static/Apache_2k.csv')
 
-        # Correctly passing the filename as an argument
-        result = subprocess.run(['bash', 'script.sh', filepath], capture_output=True, text=True)
-        
-        # Optional: print output or pass it to the HTML
-        print(result.stdout)
+        # run the script with os.system (not subprocess)
+        os.system('bash script.sh static/Apache_2k.csv')
 
-        return render_template("acknowledgment.html", output=result.stdout)
+        return render_template("acknowledgment.html")
 
 app.run(debug=True)
