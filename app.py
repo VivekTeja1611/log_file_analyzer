@@ -13,11 +13,10 @@ def main():
 def success():
     if request.method == 'POST':
         f = request.files['file']
-        f.save('static/Apache_2k.csv')
+        f.save('Apache_2k.log')
 
         # run the script with os.system (not subprocess)
-        os.system('bash script.sh static/Apache_2k.csv')
-
+        os.system('bash script.sh Apache_2k.log')       
         return render_template("acknowledgment.html")
 
 app.run(debug=True)
