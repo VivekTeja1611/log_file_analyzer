@@ -1,5 +1,5 @@
 #!/bin/bash
-file=$(<$1)
+file="$1"
 rm static/Apache_2k.csv 2>/dev/null
 if [[ "$?" == "0" ]]; then
 echo "removed successfully"
@@ -7,7 +7,7 @@ fi
 touch  static/Apache_2k.csv
 echo "created successfully"
 echo "Time,Level,Content">> static/Apache_2k.csv
-sed -En 's/(\[[a-zA-Z0-9 :]+\]) (\[[a-z]+\]) (.*)/\1,\2,\3/p' file >> static/Apache_2k.csv
+sed -En 's/(\[[a-zA-Z0-9 :]+\]) (\[[a-z]+\]) (.*)/\1,\2,\3/p' "$file" >> static/Apache_2k.csv
 if [[ "$?" == "0" ]]; then
 echo "sed process done"
 fi

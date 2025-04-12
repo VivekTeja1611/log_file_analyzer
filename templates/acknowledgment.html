@@ -9,7 +9,32 @@
 
 <body>
    <h2>Successfully uploaded!</h2>
-   <iframe src="./static/Apache_2k.csv" width="100%" height="500px" frameborder="0"></iframe>
+   <p><a href="/static/Apache_2k.csv" target="_blank">Click here to view the CSV file</a></p>
+   <div id="csv-table"></div>
+   
 </body>
+<script>
+fetch('/static/Apache_2k.csv')
+  .then(response => response.text())
+  .then(data => {
+    const rows = data.trim().split('\n');
+    const table = document.createElement('table');
+    table.border = '1';
+    table.style.borderCollapse = 'collapse';
+
+    rows.forEach((row, i) => {
+      const tr = document.createElement('tr');
+      row.split(',').forEach(cell => {
+        const td = document.createElement(i === 0 ? 'th' : 'td');
+        td.textContent = cell;
+        td.style.padding = '4px 8px';
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+
+    document.getElementById('csv-table').appendChild(table);
+  });
+</script>
 
 </html>
