@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="plot.css">
+    <title>plot.html</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+    }
+
+    img {
+        max-width: 90%;
+        height: auto;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+
+    form {
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    input[type="text"] {
+        padding: 10px;
+        width: 300px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    a {
+        display: inline-block;
+        margin-top: 15px;
+        color: #007bff;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+    }
+
+    a:hover {
+        color: #0056b3;
+    }
+</style>
+<body>
+    <img src="{{ url_for('static', filename='pie_plot.jpg') }}" alt="Pie Chart">
+    <form method="POST" action="/submit">
+        <input type="text" name="sdt" placeholder="[Sun Dec 04 04:47:44 2005]">
+        <input type="text" name="edt" placeholder="[Mon Dec 05 19:15:57 2005]">                
+        <input type="submit" value="Submit">
+      </form>
+      <p><a href="/static/pie_plot.jpg" target="_blank">Click here to download image of plot</a></p>
+</body>
+<script>
+    
+</script>
+</html>
