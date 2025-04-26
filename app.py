@@ -1,7 +1,6 @@
 from flask import Flask, redirect, render_template, request, send_file
 import os
 import matplotlib.pyplot as plt
-from datetime import datetime
 
 app = Flask(__name__)
 
@@ -9,9 +8,9 @@ app = Flask(__name__)
 def main():
     return render_template("index.html")
 
+
 @app.route('/success', methods=['POST'])
 def success():
-    if request.method == 'POST':
         f = request.files['file']
         f.save('Apache_2k.log')
         os.system('bash script.sh Apache_2k.log')  
@@ -19,17 +18,6 @@ def success():
 
 
 def generate_plot(X, Y):
-    #X =0 
-    #Y = 0
-    #with open("time", 'r') as file:
-    #    for line in file:
-    #        if line.strip() == time1:
-    #            break
-    #        X += 1
-    #    for line in file:
-    #        if line.strip() == time2:
-    #            break
-    #        Y += 1
     X=int(X)
     Y=int(Y)
     print("in generate func X and Y are:",X,Y)
@@ -84,6 +72,8 @@ def generate_plot(X, Y):
     plt.hist(arr,bins=5,color='skyblue',edgecolor='black')
     plt.savefig("static/pie_plot.jpg")
     plt.close()
+
+
 
 
 @app.route('/plot.html')
