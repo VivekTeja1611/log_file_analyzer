@@ -1,7 +1,11 @@
 from flask import Flask, redirect, render_template, request, send_file
 import os
+import matplotlib
+matplotlib.use('Agg') #using this to reduce loading speed
 import matplotlib.pyplot as plt
-
+def not_show():
+    pass
+plt.show=not_show
 app = Flask(__name__)
 
 @app.route('/')
@@ -53,30 +57,35 @@ def generate_plot(X, Y):
          for line in file:
               arr.append(line.strip())
          
-    plt.figure(figsize=(14, 6.5))
+    #plt.figure(figsize=(14, 6.5))
     if x+y >0:       
          labels = ['notice', 'error']
          sizes = [x, y]
          colors = ['#ff9999', '#66b3ff']
-         plt.subplot(2,2,1)
+        # plt.subplot(2,2,1)
          plt.pie(sizes, labels=labels, colors=colors)
+         plt.savefig("static/pie_plot.png")
+         plt.close()
     else:
-        plt.subplot(2, 2, 1)
+        #plt.subplot(2, 2, 1)
         plt.text(0.5, 0.5, 'No data in pie range', ha='center', va='center', fontsize=12)
         plt.axis('off')     
+        plt.close()
 
-    plt.subplot(2,2,2)
+    #plt.subplot(2,2,2)
     plt.plot(arr_x,arr_y)
+    plt.savefig("static/plot_plot.png")
+    plt.close()
     plt.gca().set_xticklabels([]) #to hide the labels on x axis in line plot
-    plt.subplot(2,2,3)
+   # plt.subplot(2,2,3)
     plt.hist(arr,bins=5,color='skyblue',edgecolor='black')
-    plt.savefig("static/pie_plot.jpg")
+    plt.savefig("static/hist_plot.png")
     plt.close()
 
 
 
 
-@app.route('/plot.html')
+@app.route('/plot.html',methods=["POST"])
 def plot():
     os.system('bash script2.sh static/Apache_2k.csv')
     with open("tmp1.txt",'r') as file:
@@ -86,7 +95,7 @@ def plot():
     time1 = 1
     #time2 = "[Mon Dec 05 19:15:57 2005]"
     generate_plot(time1, time2)
-    return render_template("plot.html")
+    return render_template("plot.html")     
 
 @app.route("/submit", methods=["POST"])
 def submit():
@@ -108,7 +117,31 @@ def submit():
 
         return render_template("plot.html")
 
+@app.route("/graph_plotter",methods=["post"])
+def plotter():
+    #   code=""
+         plot_url=""
+    #   if request.method=="post":
+         if request.form.get("text-box"):
+        # if not code:
+        #     return "Error:no code submittedd"
+        #  if code !="":
+            code=''
+            code=request.form.get("text-box")
+            plt.close()
+            exec(code)
+            plt.savefig("static/user_plot.png")
+            plot_url= "static/user_plot.png" 
+            return render_template("plotter.html",plot_url=plot_url)
+         else:
+             return render_template("plotter.html",plot_url=plot_url) 
 
+# @app.route("/plotted",methods=["POST"])
+# def plotr():
+#      code=request.form['text-box']
+#     #  print(code)
+#      exec(code)
+#      return render_template("plottedd.html")
 app.run(debug=True)
 
 

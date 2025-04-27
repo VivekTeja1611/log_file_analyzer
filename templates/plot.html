@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="plot.css">
+    <!-- <link rel="stylesheet" href="plot.css"> -->
     <title>plot.html</title>
 </head>
 <style>
@@ -69,15 +69,23 @@
     }
 </style>
 <body>
-    <img src="{{ url_for('static', filename='pie_plot.jpg') }}" alt="Pie Chart">
+    <p>
+    <img src="{{ url_for('static', filename='pie_plot.png') }}" alt="Pie Chart">
+    <a href="/static/pie_plot.png" target="_blank" style="color: black;border-width: 2px;">Click here to download image of plot</a></p>
+
+    <p>
+    <img src="{{ url_for('static', filename='hist_plot.png') }}" alt="Histogram Chart">
+   <a href="/static/hist_plot.png" target="_blank"style="color: black;">Click here to download image of plot</a></p>
+
+   <p>
+    <img src="{{ url_for('static', filename='plot_plot.png') }}" alt="plot Chart">
+    <a href="/static/plot_plot.png" target="_blank"style="color: black;">Click here to download image of plot</a></p>
+
+
     <form method="POST" action="/submit">
         <input type="text" name="sdt" placeholder="[Sun Dec 04 04:47:44 2005]">
         <input type="text" name="edt" placeholder="[Mon Dec 05 19:15:57 2005]">                
         <input type="submit" value="Submit">
       </form>
-      <p><a href="/static/pie_plot.jpg" target="_blank">Click here to download image of plot</a></p>
 </body>
-<script>
-    
-</script>
 </html>

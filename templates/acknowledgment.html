@@ -93,20 +93,38 @@
 <body>
     <h2>Successfully uploaded!</h2>
     <p><a href="/static/Apache_2k.csv" target="_blank">Click here to download the CSV file</a></p>
-    <button type="button" id="plot" onclick="redirectToPage()">plot graph</button>
+    
+
+    <form action="/plot.html" method="POST">
+        <h3>filter</h3>
+        <label for="Level">Level:</label>
+        <select name="Level" id="Level">
+            <option value="All">All</option>
+            <option value="Notice">Notice</option>
+            <option value="Error">Error</option>
+        </select>
+        <label for="EventId">EventId:</label>
+        <select name="EventId" id="EventId">
+            <option value="All">All</option>
+            <option value="E1">E1</option>
+            <option value="E2">E2</option>
+            <option value="E3">E3</option>
+            <option value="E4">E4</option>
+            <option value="E5">E5</option>
+            <option value="E6">E6</option>
+        </select>
+        <button type="submit" id="plot">plot graph</button>
+    </form>
+    
     <div id="csv-table"></div>
 </body>
 <script>
-    function redirectToPage() {
-        window.location.href ="/plot.html";
-    }
     fetch('/static/Apache_2k.csv')
         .then(response => response.text())
         .then(data => {
             const rows = data.trim().split('\n');
             const table = document.createElement('table');
             table.border = '1';
-            // table.style.borderCollapse = 'collapse';
             rows.forEach((row, i) => {
                 const tr = document.createElement('tr');
                 row.split(',').forEach(cell => {

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>graph plotter</title>
+</head>
+<style>
+    body {
+        font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #eef2f7;
+        margin: 0;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    form {
+        background: #ffffff;
+        padding: 30px 35px;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        width: 90%;
+        max-width: 700px;
+        text-align: center;
+    }
+
+    h3 {
+        margin-bottom: 25px;
+        color: #2c3e50;
+        font-size: 24px;
+    }
+
+    #text-box {
+        width: 100%;
+        height: auto;
+        padding: 15px;
+        font-size: 16px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        resize: vertical;
+        margin-bottom: 20px;
+        background-color: #fafafa;
+    }
+
+    button {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 28px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<body>
+    <form action="/graph_plotter" method="POST"> 
+        <h3>Write ur python code below!</h3>
+        <textarea  name="text-box" rows="15" cols="70" placeholder="Type your code here..." ></textarea><br><br><br>
+        <button type="submit">Run</button>
+    </form>
+    <img src="{{ url_for('static', filename='empty_plot.png') }}" id="img-plot" alt="Plot" style="display: none;margin-top: 5px;">
+</body>
+<script>
+    Plot_url="{{plot_url}}";
+    console.log(Plot_url,"is the plot_url")
+    img=document.getElementById("img-plot");
+    if(Plot_url){
+        img.src=Plot_url;
+        img.style.display="block";}
+     else{
+        img.style.display="none"
+     }   
+
+</script>
+</html> 

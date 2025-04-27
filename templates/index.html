@@ -3,51 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="url_for('static', filename='css/index.css')"> -->
     <title>Log File Analysis</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-top: 50px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 30px;
-        }
-        input[type="file"] {
-            margin-bottom: 20px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        input[type="submit"] {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-    </style>
 </head>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7f9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    h2 {
+        color: #333;
+        font-size: 28px;
+        margin-top: 50px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+        width: 80%;
+        max-width: 500px;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="file"] {
+        padding: 12px 20px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    input[type="submit"] {
+        padding: 12px 24px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    button {
+        padding: 12px 24px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
 <body>
+    <!-- <h1>Apache logs Analyzer!!</h1> -->
     <h2>Upload a File</h2>
-    <form action="/success" method="POST" enctype="multipart/form-data">
+    <form action="/success" method="post" enctype="multipart/form-data">
         <input type="file" name="file" required>
         <input type="submit" value="Upload">
     </form>
+    <h2>Wanna Plot ur own graph!!</h2>
+     <form action="/graph_plotter" method="post">
+        <button type="submit">click here</button>
+     </form>    
 </body>
 </html>
