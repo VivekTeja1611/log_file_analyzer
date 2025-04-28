@@ -3,84 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="plot.css"> -->
+    <link rel="stylesheet" href="{{url_for('static',filename='css/plot.css')}}">
     <title>plot.html</title>
 </head>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        color: #333;
-        margin: 0;
-        padding: 20px;
-        text-align: center;
-    }
 
-    img {
-        max-width: 90%;
-        height: auto;
-        border: 2px solid #ccc;
-        border-radius: 8px;
-        margin: 20px 0;
-    }
-
-    form {
-        margin: 20px auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-
-    input[type="text"] {
-        padding: 10px;
-        width: 300px;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    input[type="submit"] {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        font-size: 1rem;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    input[type="submit"]:hover {
-        background-color: #0056b3;
-    }
-
-    a {
-        display: inline-block;
-        margin-top: 15px;
-        color: #007bff;
-        text-decoration: none;
-        font-size: 1rem;
-        transition: color 0.3s ease;
-    }
-
-    a:hover {
-        color: #0056b3;
-    }
-</style>
 <body>
-    <p>
+    <div class="img-container">
     <img src="{{ url_for('static', filename='pie_plot.png') }}" alt="Pie Chart">
-    <a href="/static/pie_plot.png" target="_blank" style="color: black;border-width: 2px;">Click here to download image of plot</a></p>
-
-    <p>
+    <a href="/static/pie_plot.png" target="_blank" style="color: black;border-width: 2px ;">Click here to download image of pie chart</a>
+    </div>
+   <div class="img-container">
     <img src="{{ url_for('static', filename='hist_plot.png') }}" alt="Histogram Chart">
-   <a href="/static/hist_plot.png" target="_blank"style="color: black;">Click here to download image of plot</a></p>
-
-   <p>
-    <img src="{{ url_for('static', filename='plot_plot.png') }}" alt="plot Chart">
-    <a href="/static/plot_plot.png" target="_blank"style="color: black;">Click here to download image of plot</a></p>
-
+   <a href="/static/hist_plot.png" target="_blank"style="color: black;">Click here to download image of Bar_graph</a>
+   </div>
+   <div class="img-container">
+   <img src="{{ url_for('static', filename='plot_plot.png') }}" alt="plot Chart">
+    <a href="/static/plot_plot.png" target="_blank"style="color: black;">Click here to download image of Lineplot</a>
+</div>
 
     <form method="POST" action="/submit">
         <input type="text" name="sdt" placeholder="[Sun Dec 04 04:47:44 2005]">

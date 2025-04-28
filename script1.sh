@@ -14,7 +14,7 @@ let y=0
 while read -r line; do 
 clean_line=$(echo "$line" | tr -d '\r' | xargs)
 clean_time1=$(echo "$time1" | tr -d '\r' | xargs)
-
+# epoch_line=$(echo ""cl)
 if [[ "${clean_line}" == "${clean_time1}" ]];then
 echo "$line and $time1 are same"
    break 
