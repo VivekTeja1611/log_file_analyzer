@@ -1,7 +1,7 @@
 from flask import Flask, redirect, render_template, request, send_file
 import os
 import matplotlib
-matplotlib.use('Agg') #using this to reduce loading speed
+matplotlib.use('Qt5Agg') #using this to reduce loading speed
 import matplotlib.pyplot as plt
 import time
 
@@ -17,6 +17,7 @@ def main():
 
 @app.route('/success', methods=['POST'])
 def success():
+        
         s_csv=time.time()
         EventId='All'
         Level='All'
@@ -30,6 +31,12 @@ def success():
           f.save('Apache_2k.log')
         command=f"bash script.sh Apache_2k.log {Level} {EventId}"
         os.system(command)  
+        with open("tmp2.txt",'r') as file:
+            for line in file:
+                print(line)
+                if int(line.strip())==1:
+                  st="only Apache log  files can be analyzed"
+                  return render_template("index.html",st=st)
         e_csv=time.time()
         print(e_csv-s_csv,"for the execution of success...where page is csv file making") 
         return render_template("acknowledgment.html",selected_event=EventId,selected_level=Level)
@@ -99,12 +106,19 @@ def generate_plot(X, Y):
     plt.close()
     #plt.gca().set_xticklabels([]) #to hide the labels on x axis in line plot
     # plt.subplot(2,2,3)
-    plt.hist(arr,bins=5,color='skyblue',edgecolor='black')
+    counts = {}
+    for item in arr:
+      if item in counts:
+          counts[item] += 1
+      else:
+           counts[item] = 1
+    labels = list(counts.keys())
+    values = list(counts.values())
+    colors = ['red', 'green', 'blue', 'orange','yellow','violet']  #
+    plt.bar(labels, values,color=colors)
     plt.title("Bar Graph")
     plt.savefig("static/hist_plot.png")
     plt.close()
-
-
 
 
 
@@ -122,7 +136,6 @@ def plot():
     e1_plot=time.time()
     print(e1_plot-s1_plot,"for sefault plotting the time is this")
     return render_template("plot.html")     
-
 
 
 @app.route("/submit", methods=["POST"])
@@ -146,8 +159,6 @@ def submit():
         e2_plot=time.time()
         print(e2_plot-s2_plot,"filter plotting time is this")
         return render_template("plot.html")
-
-
 
 
 @app.route("/graph_plotter",methods=["post"])

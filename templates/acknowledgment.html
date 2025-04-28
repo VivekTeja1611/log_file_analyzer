@@ -8,9 +8,9 @@
     <title>Success</title>
 </head>
 <body>
-    <h2>Successfully uploaded!</h2>
-    <form action="/success" method="post">
-        <h3>filter</h3>
+    <h2 id="status">Successfully uploaded!</h2>
+    <form id="filter-form" action="/success" method="post">
+        <h2>Filter The Table</h2>
         <label for="Level">Level:</label>
         <select name="Level" id="Level">
             <option value="All"{% if selected_level == 'All' %}selected{% endif %}>All</option>
@@ -27,17 +27,21 @@
             <option value="E5"{% if selected_event == 'E5' %}selected{% endif %}>E5</option>
             <option value="E6"{% if selected_event == 'E6' %}selected{% endif %}>E6</option>
         </select>
-        <button type="submit"> filter</button>
+        <br>
+        <button id="filter"type="submit">Filter</button>
     </form>
     <p><a href="/static/Apache_2k.csv" target="_blank">Click here to download the CSV file</a></p>
-
+     <p>Plot graphs for the below Table</p>
     <form action="/plot.html" method="POST">
-        <button type="submit" id="plot">plot graph</button>
+        <button type="submit" id="plot">Plot Graph</button>
     </form>
     
     <div id="csv-table"></div>
 </body>
 <script>
+    setTimeout(function(){
+        document.getElementById("status").style.display="none";
+    },3000);
     fetch('/static/Apache_2k.csv')
         .then(response => response.text())
         .then(data => {

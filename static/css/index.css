@@ -1,22 +1,20 @@
 
     body {
-        font-family: 'Arial', sans-serif;
         background-color: #f4f7f9;
-        margin: 0;
-        padding: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
-        min-height: 100vh;
     }
-
+   h1{
+     padding-top: 20px;
+   }
     h2 {
         color: #333;
         font-size: 28px;
-        margin-top: 50px;
+        margin-top: 20px;
     }
 
-    form {
+    #upload-form {
         display: flex;
         flex-direction: column;
         align-items: center;

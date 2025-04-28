@@ -1,9 +1,11 @@
-import time
+from flask import Flask, jsonify
 
-start = time.perf_counter()
+app = Flask(__name__)
 
-# some code
-time.sleep(1)
+@app.route('/')
+def home():
+    data = {"message": "Hello, World!"}
+    return jsonify(data)
 
-end = time.perf_counter()
-print(f"Time taken: {end - start} seconds")
+if __name__ == '__main__':
+    app.run(debug=True)

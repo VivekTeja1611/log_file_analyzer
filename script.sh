@@ -1,5 +1,7 @@
 #!/bin/bash
 file="$1"
+rm tmp2.txt 2>/dev/null
+touch tmp2.txt
 if [[ "$2" = "All" ]];then
 Level=""
 else
@@ -22,8 +24,6 @@ sed -En 's/(\[[a-zA-Z0-9 :]+\]) (\[[a-z]+\]) (.*)/\1,\2,\3/p' "$file" >> static/
 if [[ "$?" == "0" ]]; then
 echo "sed process done"
 fi
-
-
 
 awk  'BEGIN {
     FS = ",";
@@ -65,8 +65,11 @@ NR == 1 {
          $3=$3",""E6""," E6;      
                          } 
     print $0 ;}' static/Apache_2k.csv  > Apache_2k_numbered1.csv
-
-
+x=$(wc -l < Apache_2k_numbered1.csv)
+if [[ "$x" -eq "1" ]];then
+echo "1" > tmp2.txt
+exit 
+fi
 
 if [[ "$Level" == "" && "$EventId" == "" ]];then
 echo "executing null code for LEvel"
@@ -76,7 +79,6 @@ awk  'BEGIN {
 }
 { print $0 ;}' Apache_2k_numbered1.csv > Apache_2k_numbered.csv
  fi   
-
 
 
 if [[ "$Level" != "" && "$EventId" == "" ]];then
@@ -97,10 +99,6 @@ var == $3{
  fi   
 
 
-
-
-
-
 if [[ "$Level" == "" && "$EventId" != "" ]];then
 echo "executing EventId  code"
 awk -v var="$EventId" 'BEGIN {
@@ -119,11 +117,6 @@ var == $5{
  fi   
 
 
-
-
-
-
-
 if [[ "$Level" != "" && "$EventId" != "" ]];then
 echo "executing both codes Level and EventId"
 awk  -v var1="$Level" -v var2="$EventId" 'BEGIN {
@@ -140,19 +133,14 @@ var1==$3 && var2 == $5{
  fi   
 
 
-
-
-
-
-
 if [[ "$?" == "0" ]]; then
 echo "awk processs done too"
 fi
 # cat Apache_2k_numbered.csv
 cat Apache_2k_numbered.csv > static/Apache_2k.csv
-cut -d ',' -f 3 static/Apache_2k.csv  > notice_error
-cut -d ',' -f 2 static/Apache_2k.csv > time
-cut -d ',' -f 5 static/Apache_2k.csv > events
+cut -d ',' -f 3 static/Apache_2k.csv | tail -n +2 > notice_error
+cut -d ',' -f 2 static/Apache_2k.csv | tail -n +2 > time
+cut -d ',' -f 5 static/Apache_2k.csv | tail -n +2 > events
 if [[ "$?" == "0" ]]; then
 echo "copied successfully"
 else  echo "couldnt copy"

@@ -10,14 +10,20 @@
         align-items: center;
         text-align: center;
     }
-
-    h2 {
+p{  color: rgb(23, 22, 22);
+    font-size: 25px;
+    font-family:Arial, Helvetica, sans-serif;
+    margin-top: 0px;
+    
+}
+   #status {
         color: #28a745;
         font-size: 2rem;
         margin-bottom: 20px;
     }
-
-    /* Link styles */
+    h2{
+        padding-top: -5px;
+    }
     a {
         color: #007bff;
         text-decoration: none;
@@ -28,8 +34,6 @@
     a:hover {
         color: #0056b3;
     }
-
-    /* Button styles */
     button {
         background-color: #007bff;
         color: white;
@@ -73,10 +77,48 @@
     tr:hover {
         background-color: #e9ecef;
     }
-
-    /* Styling the table container */
     #csv-table {
         width: 100%;
         display: flex;
         justify-content: center;
     }
+    #filter-form {
+        margin-top: 30px;
+        width: 80%;
+        max-width: 500px;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+label {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+select {
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #333; 
+    border-radius: 5px;
+    margin: 10px 0;
+   
+}
+select:hover, select:focus {
+    background-color: #ccd3da;}
+
+select option {
+   
+    background-color: #ffffff;  
+     color: rgb(0, 0, 0);
+     padding: 10px;
+}
+#Level{
+    margin-right: 20px;
+}
+#filter{
+    margin-left: 20px;
+}
