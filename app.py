@@ -1,70 +1,75 @@
-from flask import Flask, redirect, render_template, request, send_file
+from flask import Flask, redirect, render_template, request
 import os
 import matplotlib
-matplotlib.use('Qt5Agg') #using this to reduce loading speed
+matplotlib.use('Agg') #using this to reduce loading speed
 import matplotlib.pyplot as plt
 import time
-
+#To overwrite the plt.show() if the userr writes plt.show in text-editor
 def not_show():
     pass
 plt.show=not_show
+
 app = Flask(__name__)
 
+
+
+#upload page (index.html shows the upload page)
 @app.route('/')
 def main():
     return render_template("index.html")
 
 
+#to dispay the Display page(csv table of uploaded file)
 @app.route('/success', methods=['POST'])
 def success():
-        
-        s_csv=time.time()
+        s_csv=time.time() #just to check run time
         EventId='All'
         Level='All'
         if request.form.get("EventId"):
-            EventId=request.form.get("EventId")  
+            EventId=request.form.get("EventId")   #EventId input in filtering in display page
         if request.form.get("Level"):
-           Level=request.form.get("Level")   
-        #print(EventId,Level)
-        if 'file' in request.files:
+           Level=request.form.get("Level")    #Level input in filtering in displlay page
+        if 'file' in request.files:   
           f = request.files['file']
-          f.save('Apache_2k.log')
-        command=f"bash script.sh Apache_2k.log {Level} {EventId}"
-        os.system(command)  
-        with open("tmp2.txt",'r') as file:
+          f.save('Apache_2k.log')             #saving the uploaded file with name Apache_2k.log
+        command=f"bash parsing_filtering.sh Apache_2k.log {Level} {EventId}"
+        os.system(command)                    #runnig the bash script which parser as well as filters the csv table
+        with open("tmp2.txt",'r') as file:    #To check  if the uploaded file is a valid Apache log file
             for line in file:
                 print(line)
                 if int(line.strip())==1:
                   st="only Apache log  files can be analyzed"
-                  return render_template("index.html",st=st)
-        e_csv=time.time()
-        print(e_csv-s_csv,"for the execution of success...where page is csv file making") 
-        return render_template("acknowledgment.html",selected_event=EventId,selected_level=Level)
+                  return render_template("index.html",st=st)  # to return error that wromg file is uploaded
+        e_csv=time.time()                                      #to check code run time
+        print(e_csv-s_csv,"for the execution of success...where page is csv file making")   #for debugging purpose
+        return render_template("acknowledgment.html",selected_event=EventId,selected_level=Level)    #returning the Displlay page 
 
   
-
+####This is  a function plots the grpahs based on line numbers in the file(line no's are generrated in a different way from the time inputs)
+##this function will be used in later functions
 def generate_plot(X, Y):
     X=int(X)
     Y=int(Y)
     print("in generate func X and Y are:",X,Y)
-    with open("notice_error", 'r') as file:
+    with open("notice_error", 'r') as file:    #data for pie plot
         x = 0
         y =0
         z = 0
         for line in file:
-            if X <= z <= Y:
+            if X < z and z <= Y:
+                print(line)
                 if line.strip() == "[notice]":
                     x += 1
                 elif line.strip() == "[error]":
                     y += 1
             z += 1
-    with open("time",'r') as file:
+    with open("time",'r') as file:  #data for line plot
      p=0
      q=0
      r=0
      dic={}
      for line in file:
-         if X<=r<=Y:
+         if X<r and r<=Y:
              if line.strip() not in dic:
                  dic[line.strip()]=1
              else:
@@ -73,82 +78,92 @@ def generate_plot(X, Y):
      arr_x=list(dic.keys()) 
      arr_y=list(dic.values())   
     
-
-    with open("events",'r') as file:
+    a,b,c=0,0,0
+    with open("events",'r') as file:  #data for bar graph
          arr=[]
          for line in file:
-              if line.strip()!= "EventId":
-               arr.append(line.strip())
-         
-    #plt.figure(figsize=(14, 6.5))
+              if X<c and c<=Y :
+                arr.append(line.strip())
+              c=c+1    
+         counts = {}
+         print(arr)
+         print(set(arr),"this is the set of arr")
+         for item in arr:
+              if item in counts:
+                  counts[item] += 1
+              else:
+                  counts[item] = 1
+
+      ##data collection is done
+      # now plotting        
     if x+y >0:       
          labels = ['[notice]', '[error] ']
          sizes = [x, y]
          colors = ['#ff9999', '#66b3ff']
-        # plt.subplot(2,2,1)
-         plt.pie(sizes, labels=labels,autopct='%1.1f%%', colors=colors)
+         plt.pie(sizes, labels=labels,autopct='%1.1f%%', colors=colors)  #pie plotting
          plt.title("Pie chart")
          plt.savefig("static/pie_plot.png")
          plt.close()
     else:
-        #plt.subplot(2, 2, 1)
         plt.text(0.5, 0.5, 'No data in pie range', ha='center', va='center', fontsize=12)
         plt.axis('off')
         plt.title("Pie chart")     
         plt.close()
 
-    #plt.subplot(2,2,2)
-    plt.plot(arr_x,arr_y)
-    # plt.gca().set_xticklabels([])
+
+    #line plot plotting
+    plt.plot(arr_x,arr_y)     
     plt.title("Line Plot")
     plt.savefig("static/plot_plot.png")
-    
     plt.close()
-    #plt.gca().set_xticklabels([]) #to hide the labels on x axis in line plot
-    # plt.subplot(2,2,3)
-    counts = {}
-    for item in arr:
-      if item in counts:
-          counts[item] += 1
-      else:
-           counts[item] = 1
-    labels = list(counts.keys())
-    values = list(counts.values())
+
+
+    labels = ['E1','E2','E3','E4','E5','E6']
+    print(labels,"labels of bar graph")
+    for k in labels:
+        if k not in counts.keys():
+            counts[k]=0
+    values=counts.values()        
+    print(values,"values of bar graph")
     colors = ['red', 'green', 'blue', 'orange','yellow','violet']  #
-    plt.bar(labels, values,color=colors)
+   
+    #bar graph plotting
+    plt.bar(labels, values,color=colors)   
     plt.title("Bar Graph")
     plt.savefig("static/hist_plot.png")
     plt.close()
 
 
 
+#Page where graphs are visible
 @app.route('/plot.html',methods=["POST"])
 def plot():
     s1_plot=time.time()
-    os.system('bash script2.sh static/Apache_2k.csv')
-    with open("tmp1.txt",'r') as file:
+    os.system('bash default_filter.sh static/Apache_2k.csv')   # this is used to find the default line numbers as i am using a function
+    with open("tmp1.txt",'r') as file:                         #which takes line numbers as arguments (so usinng ths script)
         for line in file:
             print("time2:",line.strip())
             time2=int(line.strip())
     time1 = 1
-    #time2 = "[Mon Dec 05 19:15:57 2005]"
-    generate_plot(time1, time2)
+    generate_plot(time1, time2)                                 # the default plot of the csv table(no filtering has been done)
     e1_plot=time.time()
     print(e1_plot-s1_plot,"for sefault plotting the time is this")
     return render_template("plot.html")     
 
+
+##when we want to filter the graphs based on time
 
 @app.route("/submit", methods=["POST"])
 def submit():
     s2_plot=time.time()
     if request.method == "POST":
         formatted1 = request.form['sdt'].strip()
-        formatted2 = request.form['edt'].strip()
-        with open("submitted_times.txt", "w") as f:
+        formatted2 = request.form['edt'].strip() 
+        with open("submitted_times.txt", "w") as f:   ##submittedd_times is a temporary file containg the submited times when doing filtering
             f.write(f"{formatted1}\n")
             f.write(f"{formatted2}\n")
         print(formatted1,formatted2,"are the formatted times")
-        os.system(f'bash script1.sh time submitted_times.txt')
+        os.system(f'bash filter_time.sh time submitted_times.txt')   #
         with open("tmp.txt",'r') as file:
             for line in file:
                 line=line.split(',')
@@ -195,7 +210,6 @@ plt.show()
              print(e_graph-s_graph,"time to graph is this")  
              return render_template("plotter.html",plot_url=plot_url,code=code)
 
-        
 app.run(debug=True)
 
 

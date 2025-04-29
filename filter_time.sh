@@ -2,8 +2,6 @@
 file=$1
 file1=$2
 
-r=0
-cat $file1
 time1=$(head -n 1 $file1)
 time2=$(tail -n 1 $file1)
 
@@ -19,7 +17,7 @@ if [[ "$epoch_time1" -gt "$epoch_time2" ]];then
 x=$epoch_time1
 $epoch_time1=$epoch_time2
 $epoch_time2=$x
-
+fi
 
 let x=0
 let y=0
@@ -29,8 +27,10 @@ clean_line=$(echo "$clean_line" | tr -d '[]' | xargs)
 epoch_line=$(date -d "$clean_line" +%s)
 
 if [[ "${epoch_line}" -ge "${epoch_time1}" ]];then
-echo "$line and $time1 are same"
+echo "$line is after $time1"
    break 
+else
+echo "$clean_line and $time1"   
 fi
    ((x=x+1))
    done < "$file"
@@ -41,13 +41,15 @@ clean_line=$(echo "$line" | tr -d '\r' | xargs)
 clean_line=$(echo "$clean_line" | tr -d '[]' | xargs)
 epoch_line=$(date -d "$clean_line" +%s)
 
-if [[ "${epoch_line}" -ge "${epoch_time2}" ]]; then
-   echo "$time2 and $line are same"
+if [[ "${epoch_line}" -gt "${epoch_time2}" ]]; then
+      echo "$line is after $time2"
    break 
+else 
+echo "$clean_line and $time2"      
 fi
    ((y=y+1))
    done < "$file"
 
 
 echo "done script1.sh values are $x,$y"   
-echo "${x},${y}" > tmp.txt
+echo "${x},${y}" > "tmp.txt"

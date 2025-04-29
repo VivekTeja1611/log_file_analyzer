@@ -136,14 +136,16 @@ var1==$3 && var2 == $5{
 if [[ "$?" == "0" ]]; then
 echo "awk processs done too"
 fi
-# cat Apache_2k_numbered.csv
+
 cat Apache_2k_numbered.csv > static/Apache_2k.csv
-cut -d ',' -f 3 static/Apache_2k.csv | tail -n +2 > notice_error
-cut -d ',' -f 2 static/Apache_2k.csv | tail -n +2 > time
-cut -d ',' -f 5 static/Apache_2k.csv | tail -n +2 > events
+cut -d ',' -f 3 static/Apache_2k.csv  > "notice_error"
+cut -d ',' -f 2 static/Apache_2k.csv  | tail -n +2 > time
+cut -d ',' -f 5 static/Apache_2k.csv | tail -n +2 >events
+
 if [[ "$?" == "0" ]]; then
 echo "copied successfully"
-else  echo "couldnt copy"
+else
+ echo "couldnt copy"
 fi
 
 
