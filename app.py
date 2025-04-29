@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request
+from flask import Flask,render_template, request
 import os
 import matplotlib
 matplotlib.use('Agg') #using this to reduce loading speed
@@ -13,15 +13,15 @@ app = Flask(__name__)
 
 
 
-#upload page (index.html shows the upload page)
+#upload page (upload_page.html shows the upload page)
 @app.route('/')
 def main():
-    return render_template("index.html")
+    return render_template("upload_page.html")
 
 
 #to dispay the Display page(csv table of uploaded file)
-@app.route('/success', methods=['POST'])
-def success():
+@app.route('/tabular_display', methods=['POST'])
+def tabular_display():
         s_csv=time.time() #just to check run time
         EventId='All'
         Level='All'
@@ -31,18 +31,19 @@ def success():
            Level=request.form.get("Level")    #Level input in filtering in displlay page
         if 'file' in request.files:   
           f = request.files['file']
-          f.save('Apache_2k.log')             #saving the uploaded file with name Apache_2k.log
+          f.save('Apache_2k.log')              #saving the uploaded file with name Apache_2k.log
         command=f"bash parsing_filtering.sh Apache_2k.log {Level} {EventId}"
         os.system(command)                    #runnig the bash script which parser as well as filters the csv table
-        with open("tmp2.txt",'r') as file:    #To check  if the uploaded file is a valid Apache log file
+        with open("Temporary_files/error_handling.txt",'r') as file:    #To check  if the uploaded file is a valid Apache log file
             for line in file:
                 print(line)
                 if int(line.strip())==1:
-                  st="only Apache log  files can be analyzed"
-                  return render_template("index.html",st=st)  # to return error that wromg file is uploaded
+                  st="""INVALID:    only Apache log  files can be analyzed
+PLEASE TRY AGAIN!"""                  
+                  return render_template("upload_page.html",st=st)  # to return error that wromg file is uploaded
         e_csv=time.time()                                      #to check code run time
-        print(e_csv-s_csv,"for the execution of success...where page is csv file making")   #for debugging purpose
-        return render_template("acknowledgment.html",selected_event=EventId,selected_level=Level)    #returning the Displlay page 
+        print(e_csv-s_csv,"for the execution of tabular_display..where page is csv file making")   #for debugging purpose
+        return render_template("tabular_display.html",selected_event=EventId,selected_level=Level)    #returning the Displlay page 
 
   
 ####This is  a function plots the grpahs based on line numbers in the file(line no's are generrated in a different way from the time inputs)
@@ -51,7 +52,7 @@ def generate_plot(X, Y):
     X=int(X)
     Y=int(Y)
     print("in generate func X and Y are:",X,Y)
-    with open("notice_error", 'r') as file:    #data for pie plot
+    with open("Temporary_files/filtered_notice_error", 'r') as file:    #data for pie plot
         x = 0
         y =0
         z = 0
@@ -63,7 +64,7 @@ def generate_plot(X, Y):
                 elif line.strip() == "[error]":
                     y += 1
             z += 1
-    with open("time",'r') as file:  #data for line plot
+    with open("Temporary_files/filtered_time",'r') as file:  #data for line plot
      p=0
      q=0
      r=0
@@ -79,7 +80,7 @@ def generate_plot(X, Y):
      arr_y=list(dic.values())   
     
     a,b,c=0,0,0
-    with open("events",'r') as file:  #data for bar graph
+    with open("Temporary_files/filtered_events",'r') as file:  #data for bar graph
          arr=[]
          for line in file:
               if X<c and c<=Y :
@@ -140,31 +141,32 @@ def generate_plot(X, Y):
 def plot():
     s1_plot=time.time()
     os.system('bash default_filter.sh static/Apache_2k.csv')   # this is used to find the default line numbers as i am using a function
-    with open("tmp1.txt",'r') as file:                         #which takes line numbers as arguments (so usinng ths script)
+    with open("Temporary_files/total_number_of_lines.txt",'r') as file:                         #which takes line numbers as arguments (so usinng ths script)
         for line in file:
             print("time2:",line.strip())
             time2=int(line.strip())
     time1 = 1
-    generate_plot(time1, time2)                                 # the default plot of the csv table(no filtering has been done)
+    generate_plot(time1, time2)                                 # the default plot of the csv table(no filtering has been done based on time)
     e1_plot=time.time()
     print(e1_plot-s1_plot,"for sefault plotting the time is this")
-    return render_template("plot.html")     
+    return render_template("graphs_page.html")     
 
 
 ##when we want to filter the graphs based on time
 
-@app.route("/submit", methods=["POST"])
+@app.route("/time_filter", methods=["POST"])
 def submit():
     s2_plot=time.time()
     if request.method == "POST":
         formatted1 = request.form['sdt'].strip()
         formatted2 = request.form['edt'].strip() 
-        with open("submitted_times.txt", "w") as f:   ##submittedd_times is a temporary file containg the submited times when doing filtering
+        with open("Temporary_files/submitted_times.txt", "w") as f:   
+            ##submittedd_times is a temporary file containg the submited times when doing filtering
             f.write(f"{formatted1}\n")
             f.write(f"{formatted2}\n")
         print(formatted1,formatted2,"are the formatted times")
-        os.system(f'bash filter_time.sh time submitted_times.txt')   #
-        with open("tmp.txt",'r') as file:
+        os.system(f'bash filter_time.sh time Temporary_files/submitted_times.txt')  
+        with open("Temporary_files/line_numbers.txt",'r') as file:
             for line in file:
                 line=line.split(',')
                 X=line[0].strip()
@@ -173,9 +175,12 @@ def submit():
         generate_plot(int(X), int(Y))
         e2_plot=time.time()
         print(e2_plot-s2_plot,"filter plotting time is this")
-        return render_template("plot.html")
+        return render_template("graphs_page.html")
 
 
+
+##function for graph from python code page
+#the text box has  a default code and when a plot the graph the previous code will be there in it
 @app.route("/graph_plotter",methods=["post"])
 def plotter():
          s_graph=time.time()
@@ -210,7 +215,7 @@ plt.show()
              print(e_graph-s_graph,"time to graph is this")  
              return render_template("plotter.html",plot_url=plot_url,code=code)
 
-app.run(debug=True)
+app.run(debug=True,port=5001)
 
 
 

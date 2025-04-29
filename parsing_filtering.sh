@@ -1,7 +1,8 @@
 #!/bin/bash
 file="$1"
-rm tmp2.txt 2>/dev/null
-touch tmp2.txt
+rm Temporary_files/error_handling.txt 2>/dev/null   
+touch Temporary_files/error_handling.txt  
+#error handling is just to check if the uploaded file is Apache
 if [[ "$2" = "All" ]];then
 Level=""
 else
@@ -25,6 +26,10 @@ if [[ "$?" == "0" ]]; then
 echo "sed process done"
 fi
 
+# sort -n -t','
+
+
+##adding Events and templates to csv file 
 awk  'BEGIN {
     FS = ",";
     OFS = ",";
@@ -64,13 +69,14 @@ NR == 1 {
 } else if ($3 ~ E6) {
          $3=$3",""E6""," E6;      
                          } 
-    print $0 ;}' static/Apache_2k.csv  > Apache_2k_numbered1.csv
+    print $0 ;}' static/Apache_2k.csv  > Apache_2k_numbered1.csv  
 x=$(wc -l < Apache_2k_numbered1.csv)
 if [[ "$x" -eq "1" ]];then
-echo "1" > tmp2.txt
+echo "1" > Temporary_files/error_handling.txt  
 exit 
 fi
-
+ 
+ #for the sake of filtering in display page 
 if [[ "$Level" == "" && "$EventId" == "" ]];then
 echo "executing null code for LEvel"
 awk  'BEGIN {
@@ -80,7 +86,7 @@ awk  'BEGIN {
 { print $0 ;}' Apache_2k_numbered1.csv > Apache_2k_numbered.csv
  fi   
 
-
+ #for the sake of filtering in display page 
 if [[ "$Level" != "" && "$EventId" == "" ]];then
 echo "executing Level  code"
 awk -v var="$Level" 'BEGIN {
@@ -99,6 +105,9 @@ var == $3{
  fi   
 
 
+
+
+ #for the sake of filtering in display page 
 if [[ "$Level" == "" && "$EventId" != "" ]];then
 echo "executing EventId  code"
 awk -v var="$EventId" 'BEGIN {
@@ -137,10 +146,16 @@ if [[ "$?" == "0" ]]; then
 echo "awk processs done too"
 fi
 
+
+rm Apache_2k_numbered1.csv
 cat Apache_2k_numbered.csv > static/Apache_2k.csv
-cut -d ',' -f 3 static/Apache_2k.csv  > "notice_error"
-cut -d ',' -f 2 static/Apache_2k.csv  | tail -n +2 > time
-cut -d ',' -f 5 static/Apache_2k.csv | tail -n +2 >events
+rm Apache_2k_numbered.csv
+# has the filteredd notice and error column(filteredd based on eventid and level but not time)
+cut -d ',' -f 3 static/Apache_2k.csv  > "Temporary_files/filtered_notice_error"  
+# time column which is filter basedd on event id and level
+cut -d ',' -f 2 static/Apache_2k.csv  | tail -n +2 > Temporary_files/filtered_time
+#events colummns filtered basedd on level and eventid
+cut -d ',' -f 5 static/Apache_2k.csv | tail -n +2 >Temporary_files/filtered_events
 
 if [[ "$?" == "0" ]]; then
 echo "copied successfully"

@@ -1,16 +1,18 @@
-
-    body {
+ body {
         font-family: Arial, sans-serif;
         background-color: #f4f4f4;
         color: #333;
-        margin: 0;
         padding: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
-p{  color: rgb(23, 22, 22);
+ 
+ span{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+ }
+#guide{  color: rgb(23, 22, 22);
     font-size: 25px;
     font-family:Arial, Helvetica, sans-serif;
     margin-top: 0px;
@@ -21,20 +23,17 @@ p{  color: rgb(23, 22, 22);
         font-size: 2rem;
         margin-bottom: 20px;
     }
-    h2{
-        padding-top: -5px;
-    }
-    a {
+    .a {
         color: #007bff;
         text-decoration: none;
         font-size: 1.1rem;
         transition: color 0.3s ease;
     }
 
-    a:hover {
+    .a:hover {
         color: #0056b3;
     }
-    button {
+    .button {
         background-color: #007bff;
         color: white;
         padding: 12px 24px;
@@ -46,11 +45,10 @@ p{  color: rgb(23, 22, 22);
         margin-top: 10px;
     }
 
-    button:hover {
+   .button:hover {
         background-color: #0056b3;
     }
 
-    /* Table styles */
     table {
         margin-top: 30px;
         border-collapse: collapse;
@@ -91,21 +89,19 @@ p{  color: rgb(23, 22, 22);
         border-radius: 10px;
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
-label {
+.label {
     font-family: 'Arial', sans-serif;
     font-size: 1.1rem;
     color: #333;
     margin-right: 10px;
     display: inline-block;
 }
-
 select {
     padding: 10px;
     font-size: 1rem;
     border: 2px solid #333; 
     border-radius: 5px;
-    margin: 10px 0;
-   
+    margin: 10px;
 }
 select:hover, select:focus {
     background-color: #ccd3da;}
@@ -121,4 +117,21 @@ select option {
 }
 #filter{
     margin-left: 20px;
+}
+pre {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: -15px;
+    margin-bottom: 10px;
+    background-color: #f1f3f5;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 80%;
+    max-width: 800px;
+    text-align: left;
+}
+h2,#guide{
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-weight: 600;
 }

@@ -7,18 +7,26 @@
     <title>graph plotter</title>
 </head>
 
-<body>
+<body>  
+    <!-- FORM TO WRITE THE PYTHON CODE  -->
     <form action="/graph_plotter" method="POST"> 
         <h3>Write ur python code below!</h3>
-        <textarea id="text-box" name="text-box" rows="15" cols="70" >{{code}}</textarea><br><br><br>
+        <textarea id="text-box" name="text-box" rows="15" cols="70" >{{code}}</textarea>
+        
+        <br><br><br>
+
         <button type="submit">Run</button>
     </form>
-    <img src="{{ url_for('static', filename='empty_plot.png') }}" id="img-plot" alt="Plot" style="display: none;margin-top: 5px;">
+
+
+    <img src="{{ url_for('static', filename='') }}" id="img-plot" alt="Plot" style="display: none;margin-top: 5px;">
+    
 </body>
+
 <script>
     Plot_url="{{plot_url}}";                                                                                                                                                                                                                                            
-    console.log(Plot_url,"is the plot_url");
-    // console.log(code,"code is this")
+
+
     img=document.getElementById("img-plot");
     textBox=document.getElementById("text-box");
     if(Plot_url){

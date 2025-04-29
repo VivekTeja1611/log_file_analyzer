@@ -4,20 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/acknowledgement.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/tabular_display.css')}}">
     <title>Success</title>
 </head>
 <body>
+       <!-- TABLE DISPLAY PAGE  -->
     <h2 id="status">Successfully uploaded!</h2>
-    <form id="filter-form" action="/success" method="post">
+    <h2>The table of content</h2>
+    <pre><span>NOTE:</span>In the filter box,u can filter the table based on EvenId or Level 
+       In the graph page u can further filter the graph based on Time for this filter Table</pre>
+       <!-- FORM TO FILTER THE TABLE BASED ON EVENTID AND LEVEL -->
+    <form id="filter-form" action="/tabular_display" method="post">
         <h2>Filter The Table</h2>
-        <label for="Level">Level:</label>
+        <label for="Level" class="label">Level:</label>
         <select name="Level" id="Level">
             <option value="All"{% if selected_level == 'All' %}selected{% endif %}>All</option>
             <option value="[notice]"{% if selected_level == '[notice]' %}selected{% endif %}>[notice]</option>
             <option value="[error]"{% if selected_level == '[error]' %}selected{% endif %}>[error]</option>
         </select>
-        <label for="EventId">EventId:</label>
+        <label for="EventId" class="label">EventId:</label>
         <select name="EventId" id="EventId">
             <option value="All" {% if selected_event == 'All' %}selected{% endif %} >All</option>
             <option value="E1"{% if selected_event == 'E1' %}selected{% endif %}>E1</option>
@@ -28,20 +33,24 @@
             <option value="E6"{% if selected_event == 'E6' %}selected{% endif %}>E6</option>
         </select>
         <br>
-        <button id="filter"type="submit">Filter</button>
+        <button id="filter"type="submit" class="button">Filter</button>
     </form>
-    <p><a href="/static/Apache_2k.csv" target="_blank">Click here to download the CSV file</a></p>
-     <p>Plot graphs for the below Table</p>
+      <br> 
+      <br>
+    <p><a href="/static/Apache_2k.csv" class="a"target="_blank">Click here to download the CSV file</a></p>
+     <p id="guide">Plot graphs for the below Table</p>
     <form action="/plot.html" method="POST">
-        <button type="submit" id="plot">Plot Graph</button>
+        <button type="submit" id="plot" class="button">Plot Graph</button>
     </form>
     
     <div id="csv-table"></div>
 </body>
 <script>
+    // THIS TO REMOVE THE "SUCCESSFULLY UPLOAED" THING FROM PAGE AFTER THREE SECONDS
     setTimeout(function(){
         document.getElementById("status").style.display="none";
     },3000);
+    // THIS IS TO READ THE FILE AND PRINT IT INTO A TABULAR FORM IN 
     fetch('/static/Apache_2k.csv')
         .then(response => response.text())
         .then(data => {
@@ -60,26 +69,7 @@
             });
 
             document.getElementById('csv-table').appendChild(table);
-        });
-        
-        
-    window.addEventListener('load', function() {
-        const paintEntries = performance.getEntriesByType('paint');
-
-        paintEntries.forEach(function(entry) {
-            console.log(entry.name + " : " + (entry.startTime / 1000).toFixed(2) + " seconds");
-        });
-
-        // You can specifically find "First Contentful Paint"
-        const fcp = paintEntries.find(e => e.name === 'first-contentful-paint');
-        if (fcp) {
-            console.log("First Contentful Paint (data visible) at:", (fcp.startTime / 1000).toFixed(2), "seconds");
-            alert("First Contentful Paint at: " + (fcp.startTime / 1000).toFixed(2) + " seconds");
-        }
-    });
-
-
-
+        });      
 </script>
 
 </html>

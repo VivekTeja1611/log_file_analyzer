@@ -1,14 +1,14 @@
 #!/bin/bash
 file=$1
 file1=$2
-
+#FOT THE PUPOSE OF FILTERRING W.R.T TIME IN GRPAHS PAGE(IT DOES FILTER THE FILTERD TABLE)
 time1=$(head -n 1 $file1)
 time2=$(tail -n 1 $file1)
 
 clean_time1=$(echo "$time1" | tr -d '\r' | xargs)
 clean_time1=$(echo "$clean_time1" | tr -d '[]' | xargs)
 epoch_time1=$(date -d "$clean_time1" +%s)
-
+#EOOCH TIME IS USEDD TO COMAPRE THE TIMES 
 clean_time2=$(echo "$time2" | tr -d '\r' | xargs)
 clean_time2=$(echo "$clean_time2" | tr -d '[]' | xargs)
 epoch_time2=$(date -d "$clean_time2" +%s)
@@ -21,6 +21,7 @@ fi
 
 let x=0
 let y=0
+# FINDING THE STARTING  LINE  NUMBER 
 while read -r line; do 
 clean_line=$(echo "$line" | tr -d '\r' | xargs)
 clean_line=$(echo "$clean_line" | tr -d '[]' | xargs)
@@ -35,7 +36,7 @@ fi
    ((x=x+1))
    done < "$file"
 
-
+#FINDING THE ENDING LINE NUMBER
 while read -r line; do
 clean_line=$(echo "$line" | tr -d '\r' | xargs)
 clean_line=$(echo "$clean_line" | tr -d '[]' | xargs)
@@ -52,4 +53,4 @@ fi
 
 
 echo "done script1.sh values are $x,$y"   
-echo "${x},${y}" > "tmp.txt"
+echo "${x},${y}" > "Temporary_files/line_numbers.txt" #SENDING IT INTO A FILE TO READ IT IN PYTHON SCRIPT

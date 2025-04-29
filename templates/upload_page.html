@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/upload_page.css')}}">
     <title>Log File Analysis</title>
 </head>
 <body>
-    <h1>Apache Log file analyzer</h1>
+    <!-- FILE UPLOADING -->
+    <h1 id="h1">Apache Log file analyzer</h1>
     
-    <form id="upload-form" action="/success" method="post" enctype="multipart/form-data">
-        <h2>Upload a File</h2>
+    <form id="upload-form" action="/tabular_display" method="post" enctype="multipart/form-data">
+        <h2 id="h2">Upload a File</h2>
         <input type="file" name="file" required>
         <input type="submit" value="Upload">
     </form>
-    <p>{{st}}</p>
-    <h2>TO GENERATE OWN PLOT!</h2>
+    <pre id="error_msg">{{st}}
+      </pre>
+      <!-- PLOT GENERATOR AREA -->
+      <h2>TO GENERATE OWN PLOT!</h2>
      <form action="/graph_plotter" method="post">
         <button type="submit">click here</button>
      </form>    
