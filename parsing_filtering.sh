@@ -25,8 +25,7 @@ sed -En 's/(\[[a-zA-Z0-9 :]+\]) (\[[a-z]+\]) (.*)/\1,\2,\3/p' "$file" >> static/
 if [[ "$?" == "0" ]]; then
 echo "sed process done"
 fi
-
-# sort -n -t','
+# rm Temporary_files/t.csv 2>/dev/null
 
 
 ##adding Events and templates to csv file 
