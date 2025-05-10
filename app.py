@@ -215,8 +215,9 @@ plt.show()
              print(e_graph-s_graph,"time to graph is this")  
              return render_template("plotter.html",plot_url=plot_url,code=code)
 
-app.run(debug=True,port=5001)
-
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
 
 
 
