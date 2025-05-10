@@ -48,3 +48,5 @@ waitress==2.1.2
 Werkzeug==3.0.1
 wheel==0.42.0
 zope.interface==6.1
+matplotlib==3.8.4
+
